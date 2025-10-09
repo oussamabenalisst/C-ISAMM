@@ -3,10 +3,18 @@
 main()
 {
     int i;
-    float x;
-    printf("i | x\n");
-    for (i = 1, x = 0; i <= 8; i++, x += 0.1)
+    printf("donner un entier");
+    scanf("%d", &i);
+    int x;
+    printf("donner un entier");
+    scanf("%d", &x);
+    for (i = 1, x = 0; i <= 8; i++, x += 1)
     {
-        printf("%d | %.2f\n", i, x);
+        printf("x=%d,i=%d ", x, i);
     }
+    printf("test ******************\n");
+    for (i = 1; i <= 5; printf("encore un tour \n"), i++)
+    {
+    }
+
 }
