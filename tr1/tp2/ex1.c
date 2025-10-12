@@ -1,45 +1,33 @@
 #include <stdio.h>
-
-main()
+#include <locale.h>
+int main()
 {
-    printf("\n******************test1******************\n");
-    int i;
-    printf("donner un entier");
-    scanf("%d", &i);
-    int x;
-    printf("donner un entier");
-    scanf("%d", &x);
-    for (i = 1, x = 0; i <= 8; i++, x += 1)
+    int a, b;
+    printf("Donner un entier A \n");
+    scanf("%d", &a);
+    printf("Donner un entier B \n");
+    scanf("%d", &b);
+    if (a > b)
     {
-        printf("x=%d,i=%d ", x, i);
+        printf("----------1eme cas----------\n");
+        setlocale(LC_CTYPE, "");
+        printf("A = %d est superieur a B = %d\n", a, b);
     }
-    printf("\n******************test2******************\n");
-    for (i = 1; i <= 5; printf("encore un tour \n"), i++)
+    else
     {
+        if (a < b)
+        {
+            printf("----------2eme cas----------\n");
+            setlocale(LC_CTYPE, "");
+            printf("A = %d est inferieur a B = %d\n", a, b);
+        }
+        else
+        {
+            setlocale(LC_CTYPE, "");
+            printf("----------3eme cas----------\n");
+            printf("A = %d est egale a B = %d\n", a, b);
+        }
     }
-    printf("\n******************test3******************\n");
-    printf("donner un entier");
-    scanf("%d", &i);
-    for (i = 1; i <= 100; i++)
-        ;
-    printf("%d\n", i);
-    float s = 0;
-    int i, j;
-    for (i = 1, j = 2; i < 10; i++, j++)
-    {
-        s += i + j;
-    }
-    int n;
-    do
-    {
-        printf("donner un entier");
-        scanf("%d", &n);
-    } while (n < 0);
-    n = -9;
-    while (n < 0)
-    {
-        printf("donner un entier");
-        scanf("%d", &n);
-        /* code */
-    }
+    //?e2 : if else done le cas ou il ye 2 cas posible mais done cette car il ya 3 cas possible
+    return 0;
 }
