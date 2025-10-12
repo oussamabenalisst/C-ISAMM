@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-main()
+int main()
 {
     printf("\n******************test1******************\n");
     int i;
@@ -24,7 +24,7 @@ main()
         ;
     printf("%d\n", i);
     float s = 0;
-    int i, j;
+    int j;
     for (i = 1, j = 2; i < 10; i++, j++)
     {
         s += i + j;
@@ -40,6 +40,6 @@ main()
     {
         printf("donner un entier");
         scanf("%d", &n);
-        /* code */
     }
+    return 0;
 }
