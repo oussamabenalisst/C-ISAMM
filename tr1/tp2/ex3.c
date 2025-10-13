@@ -106,15 +106,9 @@ int main()
 
         break;
     default:
+        printf("error");
         break;
     }
-
-    //? palindrome
-    //? palindrome
-    //? palindrome
-    //?parfait
-    //?parfait
-    //?parfait
 
     return 0;
 }
