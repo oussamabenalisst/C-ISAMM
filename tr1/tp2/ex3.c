@@ -2,7 +2,7 @@
 
 int main()
 {
-    int i, temp, x, s;
+    int i, temp, x, s, choix;
     do
     {
         printf("Donner un entier positif X : ");
@@ -31,72 +31,90 @@ int main()
         i++;
     }
     printf("le moyenne est : %0.2f\n", (float)s / i);
-    //? nombre uniforme
-    //? nombre uniforme
-    //? nombre uniforme
-    int testuniforme = 1;
-    int un = x % 10;
-    temp = x / 10;
-    while (temp != 0 && testuniforme)
+
+    do
     {
-        if (un == temp % 10)
+        printf("donne votre choix : ");
+        printf("1. uniforme \n 2.palindrome \n 3.parfait");
+        scanf("%d", &choix);
+    } while (choix < 0 || choix > 3);
+
+    switch (choix)
+    {
+    case 1:
+        int testuniforme = 1;
+        int un = x % 10;
+        temp = x / 10;
+        while (temp != 0 && testuniforme)
         {
-            temp /= 10;
+            if (un == temp % 10)
+            {
+                temp /= 10;
+            }
+            else
+            {
+                testuniforme = 0;
+            }
+        }
+        if (testuniforme)
+        {
+            printf("le nombre %d est uniforme", x);
         }
         else
         {
-            testuniforme = 0;
+            printf("le nombre %d n'est pas uniforme", x);
         }
-    }
-    if (testuniforme)
-    {
-        printf("le nombre %d est uniforme", x);
-    }
-    else
-    {
-        printf("le nombre %d n'est pas uniforme", x);
-    }
 
-    //? palindrome
-    //? palindrome
-    //? palindrome
-    temp = x;
-    int inverse = 0;
-    while (temp != 0)
-    {
-        inverse = (inverse * 10) + (temp % 10);
-        temp /= 10;
-    }
-    if (x == inverse)
-    {
-        printf("et palindrome");
-    }
-    else
-    {
-        printf("et non palindrome");
-    }
-
-    //?parfait
-    //?parfait
-    //?parfait
-    i = 1;
-    s = 0;
-    while (i < x)
-    {
-        if (x % i == 0)
+        break;
+    case 2:
+        temp = x;
+        int inverse = 0;
+        while (temp != 0)
         {
-            s += i;
+            inverse = (inverse * 10) + (temp % 10);
+            temp /= 10;
         }
-        i++;
+        if (x == inverse)
+        {
+            printf("et palindrome");
+        }
+        else
+        {
+            printf("et non palindrome");
+        }
+
+        break;
+    case 3:
+        i = 1;
+        s = 0;
+        while (i < x)
+        {
+            if (x % i == 0)
+            {
+                s += i;
+            }
+            i++;
+        }
+        if (s == x)
+        {
+            printf(" et parfait\n");
+        }
+        else
+        {
+            printf(" et non parfait\n");
+        }
+
+        break;
+    default:
+        break;
     }
-    if (s == x)
-    {
-        printf(" et parfait\n");
-    }
-    else
-    {
-        printf(" et non parfait\n");
-    }
+
+    //? palindrome
+    //? palindrome
+    //? palindrome
+    //?parfait
+    //?parfait
+    //?parfait
 
     return 0;
 }
