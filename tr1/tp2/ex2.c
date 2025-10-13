@@ -21,35 +21,44 @@ int main()
     {
         test = 0;
     }
-    if (test)
+    switch (m)
     {
-        switch (m)
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        do
         {
-        case 4:
-        case 6:
-        case 9:
-        case 11:
-            do
-            {
-                printf("Donner un entier J (1-31) : ");
-                scanf("%d", &j);
-            } while (j < 1 || j > 30);
-            break;
-        case 2:
+            printf("Donner un entier J (1-31) : ");
+            scanf("%d", &j);
+        } while (j < 1 || j > 30);
+        break;
+    case 2:
+        if (test == 1)
+        {
             do
             {
                 printf("Donner un entier J (1-31) : ");
                 scanf("%d", &j);
             } while (j < 1 || j > 29);
             break;
-        default:
+        }
+        else
+        {
             do
             {
                 printf("Donner un entier J (1-31) : ");
                 scanf("%d", &j);
-            } while (j < 1 || j > 31);
-            break;
+            } while (j < 1 || j > 28);
         }
+        break;
+    default:
+        do
+        {
+            printf("Donner un entier J (1-31) : ");
+            scanf("%d", &j);
+        } while (j < 1 || j > 31);
+        break;
     }
 
     printf("La date est : %02d/%02d/%04d\n", j, m, a);
