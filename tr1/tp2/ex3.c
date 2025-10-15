@@ -2,7 +2,7 @@
 
 int main()
 {
-    int i, temp, x, s, choix;
+    int i, temp, x, testuniforme, un, s, choix;
     do
     {
         printf("Donner un entier positif X : ");
@@ -35,15 +35,15 @@ int main()
     do
     {
         printf("donne votre choix : ");
-        printf("1. uniforme \n 2.palindrome \n 3.parfait");
+        printf("1.uniforme 2.palindrome 3.parfait\n> ");
         scanf("%d", &choix);
     } while (choix < 0 || choix > 3);
 
     switch (choix)
     {
     case 1:
-        int testuniforme = 1;
-        int un = x % 10;
+        testuniforme = 1;
+        un = x % 10;
         temp = x / 10;
         while (temp != 0 && testuniforme)
         {
@@ -76,11 +76,11 @@ int main()
         }
         if (x == inverse)
         {
-            printf("et palindrome");
+            printf("le nombre %d est palindrome", x);
         }
         else
         {
-            printf("et non palindrome");
+            printf("le nombre %d n'est pas palindrome", x);
         }
 
         break;
@@ -97,11 +97,11 @@ int main()
         }
         if (s == x)
         {
-            printf(" et parfait\n");
+            printf("le nombre %d est parfait\n", x);
         }
         else
         {
-            printf(" et non parfait\n");
+            printf("le nombre %d n'est pas parfait\n", x);
         }
 
         break;
@@ -109,6 +109,5 @@ int main()
         printf("error");
         break;
     }
-
     return 0;
 }
