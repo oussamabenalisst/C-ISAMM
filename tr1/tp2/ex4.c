@@ -2,6 +2,17 @@
 
 int main()
 {
+    printf("Table de multiplication\n");
+    for (int j = 0; j <= 10; j++)
+    {
+        if (j == 0)
+        {
+            printf("%02d|", j);
+            printf("%03d|", j);
+        }
+        else
+            printf("%03d|", j);
+    }
     for (int i = 0; i <= 10; i++)
     {
         printf("\n");
