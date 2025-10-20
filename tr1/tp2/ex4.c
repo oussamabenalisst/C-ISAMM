@@ -6,8 +6,8 @@ int main()
     for (int j = 0; j <= 10; j++)
     {
         if (j == 0)
-            printf("0X|");
-        printf("%03d ", j);
+            printf(" X|");
+        printf("%3d ", j);
     }
     printf("\n");
     for (int i = 0; i <= 10; i++)
@@ -18,10 +18,10 @@ int main()
     for (int i = 0; i <= 10; i++)
     {
         printf("\n");
-        printf("%02d|", i);
+        printf("%2d|", i);
         for (int j = 0; j <= 10; j++)
         {
-            printf("%03d ", i * j);
+            printf("%3d ", i * j);
         }
     }
     return 0;
