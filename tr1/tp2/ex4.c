@@ -7,7 +7,7 @@ int main()
     {
         if (j == 0)
         {
-            printf("%02d|", j);
+            printf("0X|");
             printf("%03d|", j);
         }
         else
