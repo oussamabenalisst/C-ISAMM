@@ -35,6 +35,46 @@ int main()
         case 'q':
             printf("Au revoir!\n");
             break;
+        case 'a':
+        {
+            int max = T[0];
+            for (int i = 1; i < n; i++)
+            {
+                if (T[i] > max)
+                    max = T[i];
+            }
+            printf("La plus grande valeur est: %d\n", max);
+        }
+        break;
+        case 'b':
+        {
+            int sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                sum += T[i];
+            }
+            printf("La moyenne est: %.2f\n", (float)sum / n);
+        }
+        break;
+        case 'c':
+        {
+            int idx1, idx2, temp;
+            printf("Entrez les indices des deux valeurs a permuter (1 a %d): ", n);
+            scanf("%d %d", &idx1, &idx2);
+            if (idx1 < 1 || idx1 > n || idx2 < 1 || idx2 > n)
+            {
+                printf("Indices invalides.\n");
+            }
+            else
+            {
+                temp = T[idx1 - 1];
+                T[idx1 - 1] = T[idx2 - 1];
+                T[idx2 - 1] = temp;
+                printf("Valeurs permutees.\n");
+            }
+        }
+        break;
+
         default:
             printf("Option non valide. Veuillez reessayer.\n");
             break;
