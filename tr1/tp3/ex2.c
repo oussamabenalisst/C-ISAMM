@@ -18,7 +18,7 @@ int main()
             scanf("%d", &T[i]);
         } while (T[i] < 100 || T[i] >= 1000);
     }
-    printf("Choisissez une option:\n-a:Afficher la plus grande valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-s:help\n-q:quit\n");
+    printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
     do
     {
         do
@@ -30,19 +30,25 @@ int main()
         switch (choix)
         {
         case 's':
-            printf("Choisissez une option:\n-a:Afficher la plus grande valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
+            printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
             break;
         case 'q':
             printf("Au revoir!\n");
             break;
         case 'a':
         {
+            int min = T[0];
             int max = T[0];
             for (int i = 1; i < n; i++)
             {
                 if (T[i] > max)
                     max = T[i];
+                if (T[i] < min)
+                {
+                    min = T[i];
+                }
             }
+            printf("La plus petite valeur est: %d\n", min);
             printf("La plus grande valeur est: %d\n", max);
         }
         break;
