@@ -106,7 +106,22 @@ int main()
             printf("Valeur inseree.\n");
         }
         break;
-
+        case 'e':
+        {
+            int position;
+            do
+            {
+                printf("Entrez la position a supprimer (1 a %d): ", n);
+                scanf("%d", &position);
+            } while (position < 1 || position > n);
+            for (int i = position - 1; i < n - 1; i++)
+            {
+                T[i] = T[i + 1];
+            }
+            n--;
+            printf("Element supprime.\n");
+        }
+        break;
         default:
             printf("Option non valide. Veuillez reessayer.\n");
             break;
