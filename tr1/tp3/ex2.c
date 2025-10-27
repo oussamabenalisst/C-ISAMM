@@ -30,7 +30,7 @@ int main()
         switch (choix)
         {
         case 's':
-            printf("Choisissez une option:\n-a:Afficher la plus grande valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-s:help\n-q:quit\n");
+            printf("Choisissez une option:\n-a:Afficher la plus grande valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
             break;
         case 'q':
             printf("Au revoir!\n");
@@ -72,6 +72,38 @@ int main()
                 T[idx2 - 1] = temp;
                 printf("Valeurs permutees.\n");
             }
+        }
+        break;
+        case 'z':
+        {
+            printf("Elements du tableau:\n");
+            for (int i = 0; i < n; i++)
+            {
+                printf("%d ", T[i]);
+            }
+            printf("\n");
+        }
+        break;
+        case 'd':
+        {
+            int newValue, position;
+            do
+            {
+                printf("Entrez la nouvelle valeur: ");
+                scanf("%d", &newValue);
+            } while (newValue < 100 || newValue >= 1000);
+            do
+            {
+                printf("Entrez la position d'insertion (1 a %d): ", n + 1);
+                scanf("%d", &position);
+            } while (position < 1 || position > n + 1);
+            for (int i = n; i >= position; i--)
+            {
+                T[i] = T[i - 1];
+            }
+            T[position - 1] = newValue;
+            n++;
+            printf("Valeur inseree.\n");
         }
         break;
 
