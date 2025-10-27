@@ -14,7 +14,7 @@ int main()
             scanf("%d", &x);
         } while (x < 0 || x >= 10);
         num = num * 10 + x;
-    } while (x != 0 && suite != 9);
+    } while (x != 0);
     printf("la suite est %d \n", num);
     //? ************* inverse *************//
     //? ************* inverse *************//
