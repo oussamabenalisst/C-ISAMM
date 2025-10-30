@@ -283,7 +283,3 @@ Apprentissage du plus simple au plus complexe
 6. **Limiter les tailles** de chaînes : `scanf("%99s", buffer);` si buffer[100].
 7. **Appeler `srand()` une fois** au démarrage.
 8. **Compiler avec `-lm`** si vous utilisez `sqrt()` ou `pow()`.
-
----
-
-Fichier : `c/README.md` — guide en français du plus simple au plus complexe, pour débutants.
