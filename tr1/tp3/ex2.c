@@ -128,6 +128,19 @@ int main()
             printf("Element supprime.\n");
         }
         break;
+        case 'f':
+        {
+            int unique[SIZE] = {0};
+            for (int i = 0; i < n; i++)
+            {
+                int isUnique = 1;
+                for (int j = 0; j < n; j++)
+                {
+                    /* code */
+                }
+            }
+        }
+
         default:
             printf("Option non valide. Veuillez reessayer.\n");
             break;
