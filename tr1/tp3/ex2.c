@@ -130,17 +130,46 @@ int main()
         break;
         case 'f':
         {
+            printf("Elements uniques:\n");
             int unique[SIZE] = {0};
             for (int i = 0; i < n; i++)
             {
                 int isUnique = 1;
                 for (int j = 0; j < n; j++)
                 {
-                    /* code */
+                    if (unique[j] == T[i])
+                    {
+                        isUnique = 0;
+                        break;
+                    }
+                }
+                if (isUnique)
+                {
+                    unique[i] = T[i];
+                    printf("%d ", T[i]);
                 }
             }
+            printf("\n");
         }
-
+        break;
+        case 'g':
+        {
+            printf("Matrice carree construite a partir du tableau:\n");
+            int M[SIZE][SIZE] = {0};
+            for (int i = 0; i < n; i++)
+            {
+                M[i][i] = T[i];
+            }
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    printf("%d ", M[i][j]);
+                }
+                printf("\n");
+            }
+        }
+        break;
         default:
             printf("Option non valide. Veuillez reessayer.\n");
             break;
