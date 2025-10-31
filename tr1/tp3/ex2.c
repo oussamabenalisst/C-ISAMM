@@ -170,6 +170,133 @@ int main()
             }
         }
         break;
+        case 'h':
+        {
+            int triMethod;
+            printf("1. Tri par sélection\n2. Tri à bulles\n3. Tri par insertion\n");
+            do
+            {
+                printf("Choisissez une méthode de tri (1-3): ");
+                scanf("%d", &triMethod);
+            } while (triMethod < 1 || triMethod > 3);
+            switch (triMethod)
+            {
+            case 1:
+                for (int i = 0; i < n - 1; i++)
+                {
+                    int minIdx = i;
+                    for (int j = i + 1; j < n; j++)
+                    {
+                        if (T[j] < T[minIdx])
+                        {
+                            minIdx = j;
+                        }
+                    }
+                    int temp = T[i];
+                    T[i] = T[minIdx];
+                    T[minIdx] = temp;
+                }
+                printf("Tri par selection effectue croissant.\n");
+                break;
+            case 2:
+                for (int i = 0; i < n - 1; i++)
+                {
+                    for (int j = 0; j < n - i - 1; j++)
+                    {
+                        if (T[j] > T[j + 1])
+                        {
+                            int temp = T[j];
+                            T[j] = T[j + 1];
+                            T[j + 1] = temp;
+                        }
+                    }
+                }
+                printf("Tri a bulles effectue croissant.\n");
+                break;
+            case 3:
+                for (int i = 1; i < n; i++)
+                {
+                    int key = T[i];
+                    int j = i - 1;
+                    while (j >= 0 && T[j] > key)
+                    {
+                        T[j + 1] = T[j];
+                        j--;
+                    }
+                    T[j + 1] = key;
+                }
+                printf("Tri par insertion effectue croissant.\n");
+                break;
+
+            default:
+                printf("Méthode de tri non reconnue.\n");
+                break;
+            }
+            break;
+        }
+        case 'i':
+        {
+            int triMethod;
+            printf("1. Tri par sélection\n2. Tri à bulles\n3. Tri par insertion\n");
+            do
+            {
+                printf("Choisissez une méthode de tri (1-3): ");
+                scanf("%d", &triMethod);
+            } while (triMethod < 1 || triMethod > 3);
+            switch (triMethod)
+            {
+            case 1:
+                for (int i = 0; i < n - 1; i++)
+                {
+                    int maxIdx = i;
+                    for (int j = i + 1; j < n; j++)
+                    {
+                        if (T[j] > T[maxIdx])
+                        {
+                            maxIdx = j;
+                        }
+                    }
+                    int temp = T[i];
+                    T[i] = T[maxIdx];
+                    T[maxIdx] = temp;
+                }
+                printf("Tri par selection effectue decroissant.\n");
+                break;
+            case 2:
+                for (int i = 0; i < n - 1; i++)
+                {
+                    for (int j = 0; j < n - i - 1; j++)
+                    {
+                        if (T[j] < T[j + 1])
+                        {
+                            int temp = T[j];
+                            T[j] = T[j + 1];
+                            T[j + 1] = temp;
+                        }
+                    }
+                }
+                printf("Tri a bulles effectue decroissant.\n");
+                break;
+            case 3:
+                for (int i = 1; i < n; i++)
+                {
+                    int key = T[i];
+                    int j = i - 1;
+                    while (j >= 0 && T[j] < key)
+                    {
+                        T[j + 1] = T[j];
+                        j--;
+                    }
+                    T[j + 1] = key;
+                }
+                printf("Tri par insertion effectue decroissant.\n");
+                break;
+            default:
+                printf("Méthode de tri non reconnue.\n");
+                break;
+            }
+            break;
+        }
         default:
             printf("Option non valide. Veuillez reessayer.\n");
             break;
