@@ -273,6 +273,83 @@ Apprentissage du plus simple au plus complexe
 
 ---
 
+## ANNEXE : "Dictionnaire" (associative map)
+
+- En C il n'existe pas de type natif `dict` (clé→valeur). On utilise plutôt :
+
+  - un tableau de paires (struct) pour petits jeux de données ;
+  - un tableau trié + recherche binaire pour accès rapide en lecture ;
+  - une table de hachage (hash table) pour accès moyen O(1) — soit l'implémenter, soit utiliser une petite bibliothèque (par ex. `uthash.h` ou `glib`).
+
+- Exemple simple (table naïve : tableau de paires + recherche linéaire) :
+
+  ```c
+  #include <string.h>
+  #include <stdio.h>
+
+  typedef struct { char key[32]; int value; } Pair;
+
+  Pair dict[100];
+  int dict_n = 0;
+
+  void set_pair(const char *k, int v) {
+      for (int i = 0; i < dict_n; ++i)
+          if (strcmp(dict[i].key, k) == 0) { dict[i].value = v; return; }
+      strncpy(dict[dict_n].key, k, 31);
+      dict[dict_n].key[31] = '\0';
+      dict[dict_n].value = v;
+      dict_n++;
+  }
+
+  int get_pair(const char *k, int *out) {
+      for (int i = 0; i < dict_n; ++i)
+          if (strcmp(dict[i].key, k) == 0) { *out = dict[i].value; return 1; }
+      return 0; // absent
+  }
+  ```
+
+- Exemple court avec `uthash` (bibliothèque très légère pour tables de hachage en C) :
+
+  ```c
+  // require: https://troydhanson.github.io/uthash/ (ajouter uthash.h au projet)
+  #include "uthash.h"
+  #include <stdlib.h>
+  #include <string.h>
+
+  typedef struct {
+      char key[32];
+      int value;
+      UT_hash_handle hh; // macro pour uthash
+  } HashItem;
+
+  HashItem *map = NULL; // pointeur vers la table
+
+  void set_hash(const char *k, int v) {
+      HashItem *s;
+      HASH_FIND_STR(map, k, s);
+      if (!s) {
+          s = malloc(sizeof *s);
+          strncpy(s->key, k, 31); s->key[31] = '\0';
+          s->value = v;
+          HASH_ADD_STR(map, key, s);
+      } else s->value = v;
+  }
+
+  int get_hash(const char *k, int *out) {
+      HashItem *s;
+      HASH_FIND_STR(map, k, s);
+      if (s) { *out = s->value; return 1; }
+      return 0;
+  }
+  ```
+
+- Remarques pratiques :
+  - Pour de petits programmes, un tableau de paires suffit et est simple à comprendre.
+  - Pour des usages réels (beaucoup d'éléments / performances), préférez une table de hachage (`uthash` ou `glib`).
+  - Les clés en C sont souvent des chaînes (`char *`) ou des entiers ; attention à la gestion mémoire (copier les clés si nécessaire).
+
+---
+
 ## Bonnes pratiques (à appliquer dès le début)
 
 1. **Toujours initialiser** les variables avant de les utiliser.
@@ -283,3 +360,4 @@ Apprentissage du plus simple au plus complexe
 6. **Limiter les tailles** de chaînes : `scanf("%99s", buffer);` si buffer[100].
 7. **Appeler `srand()` une fois** au démarrage.
 8. **Compiler avec `-lm`** si vous utilisez `sqrt()` ou `pow()`.
+
