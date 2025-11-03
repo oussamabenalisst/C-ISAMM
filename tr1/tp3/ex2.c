@@ -18,7 +18,7 @@ int main()
             scanf("%d", &T[i]);
         } while (T[i] < 100 || T[i] >= 1000);
     }
-    printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
+    printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-r:rechercher un element\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
     do
     {
         do
@@ -30,8 +30,35 @@ int main()
         switch (choix)
         {
         case 's':
-            printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
+            printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-r:rechercher un element\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
             break;
+
+        case 'r':
+        {
+            int var, index = -1;
+            do
+            {
+                printf("donne le valeur >");
+                scanf("%d", &var);
+            } while (var < 100 || var >= 1000);
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (T[i] == var)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1)
+            {
+                printf("valer in t[%d]\n", index);
+            }
+            else
+            {
+                printf("not found\n");
+            }
+        }
+        break;
         case 'q':
             printf("Au revoir!\n");
             break;
@@ -173,10 +200,10 @@ int main()
         case 'h':
         {
             int triMethod;
-            printf("1. Tri par sélection\n2. Tri à bulles\n3. Tri par insertion\n");
+            printf("1. Tri par selection\n2. Tri à bulles\n3. Tri par insertion\n");
             do
             {
-                printf("Choisissez une méthode de tri (1-3): ");
+                printf("Choisissez une methode de tri (1-3): ");
                 scanf("%d", &triMethod);
             } while (triMethod < 1 || triMethod > 3);
             switch (triMethod)
@@ -229,7 +256,7 @@ int main()
                 break;
 
             default:
-                printf("Méthode de tri non reconnue.\n");
+                printf("Methode de tri non reconnue.\n");
                 break;
             }
             break;
@@ -237,10 +264,10 @@ int main()
         case 'i':
         {
             int triMethod;
-            printf("1. Tri par sélection\n2. Tri à bulles\n3. Tri par insertion\n");
+            printf("1. Tri par selection\n2. Tri à bulles\n3. Tri par insertion\n");
             do
             {
-                printf("Choisissez une méthode de tri (1-3): ");
+                printf("Choisissez une methode de tri (1-3): ");
                 scanf("%d", &triMethod);
             } while (triMethod < 1 || triMethod > 3);
             switch (triMethod)
@@ -292,7 +319,7 @@ int main()
                 printf("Tri par insertion effectue decroissant.\n");
                 break;
             default:
-                printf("Méthode de tri non reconnue.\n");
+                printf("Methode de tri non reconnue.\n");
                 break;
             }
             break;
