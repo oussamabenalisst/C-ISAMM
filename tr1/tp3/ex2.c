@@ -18,7 +18,7 @@ int main()
             scanf("%d", &T[i]);
         } while (T[i] < 100 || T[i] >= 1000);
     }
-    printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-r:rechercher un element\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
+    printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-r:rechercher un element\n-z:afficher tous les elements\nw:La recherche dichotomique\n-s:help\n-q:quit\n");
     do
     {
         do
@@ -30,7 +30,7 @@ int main()
         switch (choix)
         {
         case 's':
-            printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-r:rechercher un element\n-z:afficher tous les elements\n-s:help\n-q:quit\n");
+            printf("Choisissez une option:\n-a:Afficher la plus grande petite valeur\n-b :afficher la moyenne\n-c:permuter deux valeurs\n-d inserter une valeur\n-e Supprimer un element\n-f:Afficher tous les elements uniques\n-g:Construire la matrice\n-h:Tri dans l ordre croissant\n-i:Tri dans l ordre decroissant\n-r:rechercher un element\n-z:afficher tous les elements\nw:La recherche dichotomique\n-s:help\n-q:quit\n");
             break;
 
         case 'r':
@@ -52,6 +52,41 @@ int main()
             if (index != -1)
             {
                 printf("valer in t[%d]\n", index);
+            }
+            else
+            {
+                printf("not found\n");
+            }
+        }
+        break;
+        case 'w':
+        {
+            int var, left = 0, right = n - 1, mid, found = 0;
+            do
+            {
+                printf("donne le valeur >");
+                scanf("%d", &var);
+            } while (var < 100 || var >= 1000);
+            while (left <= right)
+            {
+                mid = (left + right) / 2;
+                if (T[mid] == var)
+                {
+                    found = 1;
+                    break;
+                }
+                else if (T[mid] < var)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
+            if (found)
+            {
+                printf("valer in t[%d]\n", mid);
             }
             else
             {
