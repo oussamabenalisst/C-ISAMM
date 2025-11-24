@@ -27,7 +27,7 @@ void calcule(char ch[100], CharCount charCounts[100], int *size)
     for (int i = 0; i < strlen(ch); i++)
     {
         count = 0;
-        if (recherch(ch[i], charCounts, *size) == 0)
+        if (!recherch(ch[i], charCounts, *size))
         {
             for (int j = 0; j < strlen(ch); j++)
                 if (ch[i] == ch[j])
