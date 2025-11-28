@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#define N 5
-
+#define N 4
 typedef struct
 {
     char name[30];
@@ -10,10 +9,10 @@ typedef struct
     float moyenne;
 } etudiants;
 
-void afficher(etudiants t[])
+void afficher(etudiants t[], int count)
 {
     printf("\n--- Liste des etudiants ---\n");
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < count; i++)
     {
         printf("Etudiant %d: %s %s, Notes: [Math: %.2f, Physique: %.2f, Sciences: %.2f], Moyenne: %.2f\n", i + 1, t[i].name, t[i].prename, t[i].md[0], t[i].md[1], t[i].md[2], t[i].moyenne);
     }
@@ -50,30 +49,30 @@ etudiants LireEtudiants()
     return e;
 }
 
-void Lire(etudiants t[])
+void Lire(etudiants t[], int count)
 {
     etudiants e;
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < count; i++)
     {
         e = LireEtudiants();
         t[i] = e;
     }
 }
 
-void CalculerMoyenne(etudiants t[])
+void CalculerMoyenne(etudiants t[], int count)
 {
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < count; i++)
     {
         t[i].moyenne = (t[i].md[0] + t[i].md[1] + t[i].md[2]) / 3;
-        printf("la moyenne de %s %s est: %.2f\n", t[i].name, t[i].prename, t[i].moyenne);
     }
 }
-void TriCroissant(etudiants t[])
+
+void Tri(etudiants t[], int count)
 {
     etudiants temp;
-    for (int i = 0; i < N - 1; i++)
+    for (int i = 0; i < count - 1; i++)
     {
-        for (int j = i + 1; j < N; j++)
+        for (int j = i + 1; j < count; j++)
         {
             if (t[i].moyenne > t[j].moyenne)
             {
@@ -84,11 +83,46 @@ void TriCroissant(etudiants t[])
         }
     }
 }
-
-void main()
+int RecherchDichotomique(etudiants t[], int low, int high, char *name)
 {
-    etudiants t[N];
-    Lire(t);
-    CalculerMoyenne(t);
-    TriCroissant(t);
+    if (low >= high)
+        return low;
+    int mid = (low + high) / 2;
+    if (strcmp(t[mid].name, name) < 0)
+        return RecherchDichotomique(t, mid + 1, high, name);
+    else
+        return RecherchDichotomique(t, low, mid, name);
+}
+
+void move(etudiants t[], int idx, int count, etudiants nv)
+{
+    // for (int i = count; i > idx; --i)
+    //     t[i] = t[i - 1];
+    // t[idx] = nv;
+    if (count <= idx)
+    {
+        t[idx] = nv;
+        return;
+    }
+    t[count] = t[count - 1];
+    move(t, idx, count - 1, nv);
+}
+
+int main()
+{
+    etudiants t[N + 1];
+    int count = N;
+    Lire(t, count);
+    CalculerMoyenne(t, count);
+    Tri(t, count);
+    afficher(t, count);
+    printf("\n--- Insertion dun nouvel etudiant (par nom) ---\n");
+    etudiants nv = LireEtudiants();
+    nv.moyenne = (nv.md[0] + nv.md[1] + nv.md[2]) / 3;
+    int idx = RecherchDichotomique(t, 0, count, nv.name);
+    move(t, idx, count, nv);
+    count++;
+    printf("\nListe apres insertion:\n");
+    afficher(t, count);
+    return 0;
 }
