@@ -68,11 +68,27 @@ void CalculerMoyenne(etudiants t[])
         printf("la moyenne de %s %s est: %.2f\n", t[i].name, t[i].prename, t[i].moyenne);
     }
 }
+void TriCroissant(etudiants t[])
+{
+    etudiants temp;
+    for (int i = 0; i < N - 1; i++)
+    {
+        for (int j = i + 1; j < N; j++)
+        {
+            if (t[i].moyenne > t[j].moyenne)
+            {
+                temp = t[i];
+                t[i] = t[j];
+                t[j] = temp;
+            }
+        }
+    }
+}
 
 void main()
 {
     etudiants t[N];
     Lire(t);
     CalculerMoyenne(t);
-    afficher(t);
+    TriCroissant(t);
 }
