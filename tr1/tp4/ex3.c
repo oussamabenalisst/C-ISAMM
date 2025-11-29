@@ -63,31 +63,6 @@ void RechercherLivre(Livre Livres[], int n)
 }
 void RemplacerAuteur(Livre t[], int n)
 {
-    int pos = -1;
-    char new[] = "Salah";
-    for (int i = 0; i < n; i++)
-    {
-        if (strlen(t[i].auteur) >= strlen(new))
-        {
-            // pos = strstr(toupper(t[i].auteur), toupper(new)) != NULL ? strstr(toupper(t[i].auteur), toupper(new)) : -1;
-            if (strstr(t[i].auteur, new) != NULL)
-            {
-                pos = strstr(t[i].auteur, new) - t[i].auteur;
-            }
-            else
-            {
-                pos = -1;
-            }
-
-            if (pos != -1)
-            {
-                for (int j = pos; j < pos + strlen(new); j++)
-                {
-                    t[i].auteur[j] = new[j - pos];
-                }
-            }
-        }
-    }
 }
 float MoyenneTaile(Livre Livres[], int n)
 {
