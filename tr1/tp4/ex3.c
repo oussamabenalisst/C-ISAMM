@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 typedef struct
 {
     char titre[50];
@@ -61,6 +61,55 @@ void RechercherLivre(Livre Livres[], int n)
         }
     }
 }
+void RemplacerAuteur(Livre t[], int n)
+{
+    int pos = -1;
+    char new[] = "Salah";
+    for (int i = 0; i < n; i++)
+    {
+        if (strlen(t[i].auteur) >= strlen(new))
+        {
+            // pos = strstr(toupper(t[i].auteur), toupper(new)) != NULL ? strstr(toupper(t[i].auteur), toupper(new)) : -1;
+            if (strstr(t[i].auteur, new) != NULL)
+            {
+                pos = strstr(t[i].auteur, new) - t[i].auteur;
+            }
+            else
+            {
+                pos = -1;
+            }
+
+            if (pos != -1)
+            {
+                for (int j = pos; j < pos + strlen(new); j++)
+                {
+                    t[i].auteur[j] = new[j - pos];
+                }
+            }
+        }
+    }
+}
+float MoyenneTaile(Livre Livres[], int n)
+{
+    int somme = 0;
+    for (int i = 0; i < n; i++)
+    {
+        somme += strlen(Livres[i].titre);
+    }
+    return somme / n;
+}
+void afficherLivres(Livre Livres[], int n)
+{
+    int moy = MoyenneTaile(Livres, n);
+    for (int i = 0; i < n; i++)
+    {
+        if (strlen(Livres[i].titre) >= moy)
+        {
+            printf("Titre : %s Auteur : %s Annee : %d ISBN : %s Etat : %d\n",
+                   Livres[i].titre, Livres[i].auteur, Livres[i].annee, Livres[i].ISBN, Livres[i].Etat);
+        }
+    }
+}
 int main()
 {
     int n = saisire();
@@ -68,5 +117,6 @@ int main()
     RemplirLivres(Livres, n);
     RechercherLivre(Livres, n);
     RemplacerAuteur(Livres, n);
+    afficherLivres(Livres, n);
     return 0;
 }
