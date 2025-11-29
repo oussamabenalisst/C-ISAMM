@@ -43,12 +43,30 @@ void RemplirLivres(Livre Livres[], int n)
         Livres[i] = saisireLivre();
     }
 }
-
+void RechercherLivre(Livre Livres[], int n)
+{
+    printf("----------Recherche d'un livre par son titre:----------\n");
+    int annee;
+    do
+    {
+        printf("Donne lannee de publication du livre : ");
+        scanf("%d", &annee);
+    } while (annee < 1000 || annee > 9999);
+    for (int i = 0; i < n; i++)
+    {
+        if (Livres[i].annee == annee)
+        {
+            printf("Titre : %s Auteur : %s Annee : %d ISBN : %s Etat : %d\n",
+                   Livres[i].titre, Livres[i].auteur, Livres[i].annee, Livres[i].ISBN, Livres[i].Etat);
+        }
+    }
+}
 int main()
 {
     int n = saisire();
     Livre Livres[100];
     RemplirLivres(Livres, n);
     RechercherLivre(Livres, n);
+    RemplacerAuteur(Livres, n);
     return 0;
 }
