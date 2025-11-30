@@ -65,26 +65,23 @@ void RemplacerAuteur(Livre t[], int n)
 {
     printf("----------Remplacement de l'auteur:----------\n");
     const char new[] = "Salah";
+    const char old[] = "Ali";
+    char sh1[50];
+    char sh2[50];
     int position = -1;
-    int test;
     for (int i = 0; i < n; i++)
     {
-        if (strlen(new) < strlen(t[i].auteur))
+        if (strlen(old) <= strlen(t[i].auteur))
         {
-            if (stricmp(t[i].auteur, new) == 0)
+            if (stricmp(t[i].auteur, old) == 0)
             {
                 strcpy(t[i].auteur, new);
             }
             else
             {
-                for (int j = 0; j < strlen(t[i].auteur) - strlen(new); j++)
+                for (int j = 0; j <= strlen(t[i].auteur) - strlen(old); j++)
                 {
-                    test = 0;
-                    for (int k = 0; k < strlen(new); k++)
-                    {
-                        test = test && (tolower(t[i].auteur[j + k]) == tolower(new[k]));
-                    }
-                    if (test)
+                    if (strnicmp(&t[i].auteur[j], old, strlen(old)) == 0)
                     {
                         position = j;
                         break;
@@ -92,10 +89,19 @@ void RemplacerAuteur(Livre t[], int n)
                 }
                 if (position != -1)
                 {
-                    for (int k = 0; k < strlen(new); k++)
+                    for (int k = 0; k < position; k++)
                     {
-                        t[i].auteur[position + k] = new[k];
+                        sh1[k] = t[i].auteur[k];
                     }
+                    sh1[position] = '\0';
+                    for (int k = position + strlen(old); k <= strlen(t[i].auteur); k++)
+                    {
+                        sh2[k - (position + strlen(old))] = t[i].auteur[k];
+                    }
+                    sh2[strlen(t[i].auteur) - (position + strlen(old))] = '\0';
+                    strcpy(t[i].auteur, sh1);
+                    strcat(t[i].auteur, new);
+                    strcat(t[i].auteur, sh2);
                 }
             }
         }
