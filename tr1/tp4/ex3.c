@@ -63,6 +63,43 @@ void RechercherLivre(Livre Livres[], int n)
 }
 void RemplacerAuteur(Livre t[], int n)
 {
+    printf("----------Remplacement de l'auteur:----------\n");
+    const char new[] = "Salah";
+    int position = -1;
+    int test;
+    for (int i = 0; i < n; i++)
+    {
+        if (strlen(new) < strlen(t[i].auteur))
+        {
+            if (stricmp(t[i].auteur, new) == 0)
+            {
+                strcpy(t[i].auteur, new);
+            }
+            else
+            {
+                for (int j = 0; j < strlen(t[i].auteur) - strlen(new); j++)
+                {
+                    test = 0;
+                    for (int k = 0; k < strlen(new); k++)
+                    {
+                        test = test && (tolower(t[i].auteur[j + k]) == tolower(new[k]));
+                    }
+                    if (test)
+                    {
+                        position = j;
+                        break;
+                    }
+                }
+                if (position != -1)
+                {
+                    for (int k = 0; k < strlen(new); k++)
+                    {
+                        t[i].auteur[position + k] = new[k];
+                    }
+                }
+            }
+        }
+    }
 }
 float MoyenneTaile(Livre Livres[], int n)
 {
