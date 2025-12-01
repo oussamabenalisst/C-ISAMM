@@ -21,7 +21,7 @@ typedef struct
     char nom[50];
     char prenom[50];
     char cin[20];
-    Date date
+    Date date;
 } Etudiant;
 
 typedef struct
@@ -181,7 +181,7 @@ Date dateretour15(Date dateEmprunt)
     }
     return dateRetour;
 }
-void RemplirEmprunts(EMPRUNT emprunts[], Livre Livres[], Etudiant etudiants[], int n_livres)
+void RemplirEmprunts(EMPRUNT emprunts[])
 {
     for (int i = 0; i < 3; i++)
     {
@@ -189,8 +189,38 @@ void RemplirEmprunts(EMPRUNT emprunts[], Livre Livres[], Etudiant etudiants[], i
         printf("Emprunt %d:\n", i + 1);
         printf("Date d'emprunt (jj mm aaaa): ");
         scanf("%d %d %d", &emprunts[i].dateEmprunt.jour, &emprunts[i].dateEmprunt.mois, &emprunts[i].dateEmprunt.annee);
-        emprunts[i].livre.Etat = -1;
         emprunts[i].dateRetour = dateretour15(emprunts[i].dateEmprunt);
+    }
+}
+int compareDates(Date d1, Date d2)
+{
+    if (d1.annee != d2.annee)
+        return d1.annee - d2.annee;
+    if (d1.mois != d2.mois)
+        return d1.mois - d2.mois;
+    return d1.jour - d2.jour;
+}
+void updateEtatLivres(Livre Livres[], int n, EMPRUNT emprunts[], int m)
+{
+    Date date;
+    printf("donne la date du jour (jj mm aaaa): ");
+    scanf("%d %d %d", &date.jour, &date.mois, &date.annee);
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (compareDates(date, emprunts[i].dateRetour) > 0)
+            {
+                if (strcmp(Livres[j].ISBN, emprunts[i].livre.ISBN) == 0)
+                {
+                    Livres[j].Etat = 1;
+                }
+                else
+                {
+                    Livres[j].Etat = 0;
+                }
+            }
+        }
     }
 }
 int main()
@@ -205,6 +235,7 @@ int main()
     int n_etudiants = saisire();
     RemplirEtudiants(etudiants, n_etudiants);
     EMPRUNT emprunts[3];
-    RemplirEmprunts(emprunts, Livres, etudiants, n);
+    RemplirEmprunts(emprunts);
+    updateEtatLivres(Livres, n, emprunts, 3);
     return 0;
 }
