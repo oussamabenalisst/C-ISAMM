@@ -29,6 +29,7 @@ typedef struct
     Etudiant etudiant;
     Livre livre;
     Date dateEmprunt;
+    Date dateRetour;
 } EMPRUNT;
 
 int saisire()
@@ -52,7 +53,7 @@ Livre saisireLivre()
     scanf("%d", &livre.annee);
     printf("ISBN: ");
     scanf("%s", livre.ISBN);
-    livre.Etat = 1;
+    livre.Etat = -1;
     return livre;
 }
 
@@ -162,6 +163,34 @@ void RemplirEtudiants(Etudiant etudiants[], int n)
         scanf("%s", etudiants[i].cin);
         printf("Date de naissance (jj mm aaaa): ");
         scanf("%d %d %d", &etudiants[i].date.jour, &etudiants[i].date.mois, &etudiants[i].date.annee);
+    }
+}
+Date dateretour15(Date dateEmprunt)
+{
+    Date dateRetour = dateEmprunt;
+    dateRetour.jour += 15;
+    if (dateRetour.jour > 30)
+    {
+        dateRetour.jour -= 30;
+        dateRetour.mois += 1;
+        if (dateRetour.mois > 12)
+        {
+            dateRetour.mois = 1;
+            dateRetour.annee += 1;
+        }
+    }
+    return dateRetour;
+}
+void RemplirEmprunts(EMPRUNT emprunts[], Livre Livres[], Etudiant etudiants[], int n_livres)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        int livre_index, etudiant_index;
+        printf("Emprunt %d:\n", i + 1);
+        printf("Date d'emprunt (jj mm aaaa): ");
+        scanf("%d %d %d", &emprunts[i].dateEmprunt.jour, &emprunts[i].dateEmprunt.mois, &emprunts[i].dateEmprunt.annee);
+        emprunts[i].livre.Etat = -1;
+        emprunts[i].dateRetour = dateretour15(emprunts[i].dateEmprunt);
     }
 }
 int main()
