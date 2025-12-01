@@ -1,241 +1,279 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#define MAX_ETUDIANTS 100
+
 typedef struct
 {
-    char titre[50];
-    char auteur[50];
+    int jj, mm, aa;
+} DATE;
+
+typedef struct
+{
+    char titre[100];
+    char auteur[100];
     int annee;
-    char ISBN[20];
+    char ISBN[30];
     int Etat;
-} Livre;
-typedef struct
-{
-    int jour;
-    int mois;
-    int annee;
-} Date;
+} LIVRE;
+
 typedef struct
 {
     char nom[50];
     char prenom[50];
-    char cin[20];
-    Date date;
-} Etudiant;
+    long CIN;
+} ETUDIANT;
 
 typedef struct
 {
-    Etudiant etudiant;
-    Livre livre;
-    Date dateEmprunt;
-    Date dateRetour;
+    ETUDIANT etud;
+    LIVRE livre;
+    DATE date_emprunt;
+    DATE date_retour;
 } EMPRUNT;
 
-int saisire()
+DATE Ajouter15Jours(DATE d)
 {
-    int n;
-    do
+    d.jj += 15;
+    int m[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    while (d.jj > m[d.mm - 1])
     {
-        printf("Donne le nombre de livres: ");
-        scanf("%d", &n);
-    } while (n < 0);
-    return n;
-}
-Livre saisireLivre()
-{
-    Livre livre;
-    printf("Titre: ");
-    scanf("%s", livre.titre);
-    printf("Auteur: ");
-    scanf("%s", livre.auteur);
-    printf("Annee: ");
-    scanf("%d", &livre.annee);
-    printf("ISBN: ");
-    scanf("%s", livre.ISBN);
-    livre.Etat = -1;
-    return livre;
+
+        d.jj -= m[d.mm - 1];
+        d.mm++;
+        if (d.mm > 12)
+        {
+            d.mm = 1;
+            d.aa++;
+        }
+    }
+    return d;
 }
 
-void RemplirLivres(Livre Livres[], int n)
+int comparer_dates(DATE d1, DATE d2)
+{
+    if (d1.aa != d2.aa)
+        return d1.aa - d2.aa;
+    if (d1.mm != d2.mm)
+        return d1.mm - d2.mm;
+    return d1.jj - d2.jj;
+}
+
+void RemplirLivres(LIVRE L[], int n)
 {
     for (int i = 0; i < n; i++)
     {
-        printf("Livre %d:\n", i + 1);
-        Livres[i] = saisireLivre();
+        printf("Saisir les informations du livre n°%d (titre auteur annee ISBN):\n", i + 1);
+        scanf("%s %s %d %s", L[i].titre, L[i].auteur, &L[i].annee, L[i].ISBN);
+        L[i].Etat = -1;
     }
 }
-void RechercherLivre(Livre Livres[], int n)
+
+void Recherche(LIVRE L[], int n)
 {
-    printf("----------Recherche d'un livre par son titre:----------\n");
-    int annee;
-    do
-    {
-        printf("Donne lannee de publication du livre : ");
-        scanf("%d", &annee);
-    } while (annee < 1000 || annee > 9999);
+    int A;
+    printf("Entrez l'année à rechercher:\n");
+    scanf("%d", &A);
+    printf("Livres publiés en %d:\n", A);
     for (int i = 0; i < n; i++)
     {
-        if (Livres[i].annee == annee)
+        if (L[i].annee == A)
+            printf("%s\n", L[i].titre);
+    }
+}
+
+void RemplacerAli(LIVRE L[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (strcasecmp(L[i].auteur, "Ali") == 0)
         {
-            printf("Titre : %s Auteur : %s Annee : %d ISBN : %s Etat : %d\n",
-                   Livres[i].titre, Livres[i].auteur, Livres[i].annee, Livres[i].ISBN, Livres[i].Etat);
+            strcpy(L[i].auteur, "Salah");
+            printf("Auteur 'Ali' remplacé par 'Salah' pour le livre %s\n", L[i].titre);
         }
     }
 }
-void RemplacerAuteur(Livre t[], int n)
+
+void AfficherPlusLong(LIVRE L[], int n)
 {
-    printf("----------Remplacement de l'auteur:----------\n");
-    const char new[] = "Salah";
-    const char old[] = "Ali";
-    char sh1[50];
-    char sh2[50];
-    int position = -1;
+    int max = 0;
+    for (int i = 1; i < n; i++)
+    {
+        if (strlen(L[i].titre) > strlen(L[max].titre))
+            max = i;
+    }
+    printf("Le titre le plus long est : %s\n", L[max].titre);
+}
+
+void RemplirEtudiants(ETUDIANT E[], int n)
+{
     for (int i = 0; i < n; i++)
     {
-        if (strlen(old) <= strlen(t[i].auteur))
+        printf("Saisir les informations de l'étudiant n°%d (nom prenom CIN):\n", i + 1);
+        scanf("%s %s %ld", E[i].nom, E[i].prenom, &E[i].CIN);
+    }
+}
+
+int rech_lineaire(ETUDIANT E[], int n, char nom[], char prenom[])
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (strcmp(E[i].nom, nom) == 0 && strcmp(E[i].prenom, prenom) == 0)
+            return i;
+    }
+    return -1;
+}
+
+int chercher_livre(LIVRE L[], int n, char isbn[])
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (strcmp(L[i].ISBN, isbn) == 0)
+            return i;
+    }
+    return -1;
+}
+
+void mise_a_jour_etat(LIVRE L[], int n, EMPRUNT emp[], int nb, DATE act)
+{
+    for (int i = 0; i < n; i++)
+        L[i].Etat = -1;
+
+    for (int i = 0; i < nb; i++)
+    {
+        int k = chercher_livre(L, n, emp[i].livre.ISBN);
+        if (k != -1)
         {
-            if (stricmp(t[i].auteur, old) == 0)
-            {
-                strcpy(t[i].auteur, new);
-            }
+            if (comparer_dates(act, emp[i].date_retour) > 0)
+                L[k].Etat = 1;
             else
-            {
-                for (int j = 0; j <= strlen(t[i].auteur) - strlen(old); j++)
-                {
-                    if (strnicmp(&t[i].auteur[j], old, strlen(old)) == 0)
-                    {
-                        position = j;
-                        break;
-                    }
-                }
-                if (position != -1)
-                {
-                    for (int k = 0; k < position; k++)
-                    {
-                        sh1[k] = t[i].auteur[k];
-                    }
-                    sh1[position] = '\0';
-                    for (int k = position + strlen(old); k <= strlen(t[i].auteur); k++)
-                    {
-                        sh2[k - (position + strlen(old))] = t[i].auteur[k];
-                    }
-                    sh2[strlen(t[i].auteur) - (position + strlen(old))] = '\0';
-                    strcpy(t[i].auteur, sh1);
-                    strcat(t[i].auteur, new);
-                    strcat(t[i].auteur, sh2);
-                }
-            }
+                L[k].Etat = 0;
         }
     }
 }
-float MoyenneTaile(Livre Livres[], int n)
+
+void AfficherEtudiants(ETUDIANT E[], int n)
 {
-    int somme = 0;
+    printf("=== Liste des étudiants ===\n");
     for (int i = 0; i < n; i++)
     {
-        somme += strlen(Livres[i].titre);
+        printf("Etudiant %d : %s %s CIN: %ld\n", i + 1, E[i].nom, E[i].prenom, E[i].CIN);
     }
-    return somme / n;
+    printf("\n");
 }
-void afficherLivres(Livre Livres[], int n)
+
+void AfficherEmprunts(EMPRUNT emp[], int nb)
 {
-    int moy = MoyenneTaile(Livres, n);
-    for (int i = 0; i < n; i++)
+    printf("=== Liste des emprunts ===\n");
+    for (int i = 0; i < nb; i++)
     {
-        if (strlen(Livres[i].titre) >= moy)
-        {
-            printf("Titre : %s Auteur : %s Annee : %d ISBN : %s Etat : %d\n",
-                   Livres[i].titre, Livres[i].auteur, Livres[i].annee, Livres[i].ISBN, Livres[i].Etat);
-        }
+
+        printf("Emprunt %d : Etudiant %s %s, Livre %s, Date emprunt: %02d/%02d/%04d, Date retour: %02d/%02d/%04d\n",
+               i + 1,
+               emp[i].etud.nom, emp[i].etud.prenom,
+               emp[i].livre.titre,
+               emp[i].date_emprunt.jj, emp[i].date_emprunt.mm, emp[i].date_emprunt.aa,
+               emp[i].date_retour.jj, emp[i].date_retour.mm, emp[i].date_retour.aa
+
+        );
     }
+    printf("\n");
 }
-void RemplirEtudiants(Etudiant etudiants[], int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        printf("Etudiant %d:\n", i + 1);
-        printf("Nom: ");
-        scanf("%s", etudiants[i].nom);
-        printf("Prenom: ");
-        scanf("%s", etudiants[i].prenom);
-        printf("CIN: ");
-        scanf("%s", etudiants[i].cin);
-        printf("Date de naissance (jj mm aaaa): ");
-        scanf("%d %d %d", &etudiants[i].date.jour, &etudiants[i].date.mois, &etudiants[i].date.annee);
-    }
-}
-Date dateretour15(Date dateEmprunt)
-{
-    Date dateRetour = dateEmprunt;
-    dateRetour.jour += 15;
-    if (dateRetour.jour > 30)
-    {
-        dateRetour.jour -= 30;
-        dateRetour.mois += 1;
-        if (dateRetour.mois > 12)
-        {
-            dateRetour.mois = 1;
-            dateRetour.annee += 1;
-        }
-    }
-    return dateRetour;
-}
-void RemplirEmprunts(EMPRUNT emprunts[])
-{
-    for (int i = 0; i < 3; i++)
-    {
-        int livre_index, etudiant_index;
-        printf("Emprunt %d:\n", i + 1);
-        printf("Date d'emprunt (jj mm aaaa): ");
-        scanf("%d %d %d", &emprunts[i].dateEmprunt.jour, &emprunts[i].dateEmprunt.mois, &emprunts[i].dateEmprunt.annee);
-        emprunts[i].dateRetour = dateretour15(emprunts[i].dateEmprunt);
-    }
-}
-int compareDates(Date d1, Date d2)
-{
-    if (d1.annee != d2.annee)
-        return d1.annee - d2.annee;
-    if (d1.mois != d2.mois)
-        return d1.mois - d2.mois;
-    return d1.jour - d2.jour;
-}
-void updateEtatLivres(Livre Livres[], int n, EMPRUNT emprunts[], int m)
-{
-    Date date;
-    printf("donne la date du jour (jj mm aaaa): ");
-    scanf("%d %d %d", &date.jour, &date.mois, &date.annee);
-    for (int i = 0; i < m; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if (compareDates(date, emprunts[i].dateRetour) > 0)
-            {
-                if (strcmp(Livres[j].ISBN, emprunts[i].livre.ISBN) == 0)
-                {
-                    Livres[j].Etat = 1;
-                }
-                else
-                {
-                    Livres[j].Etat = 0;
-                }
-            }
-        }
-    }
-}
+
 int main()
 {
-    int n = saisire();
-    Livre Livres[100];
-    RemplirLivres(Livres, n);
-    RechercherLivre(Livres, n);
-    RemplacerAuteur(Livres, n);
-    afficherLivres(Livres, n);
-    Etudiant etudiants[MAX_ETUDIANTS];
-    int n_etudiants = saisire();
-    RemplirEtudiants(etudiants, n_etudiants);
-    EMPRUNT emprunts[3];
-    RemplirEmprunts(emprunts);
-    updateEtatLivres(Livres, n, emprunts, 3);
+    int n;
+    printf("Saisir le nombre de livres:\n");
+    scanf("%d", &n);
+    LIVRE L[100];
+    RemplirLivres(L, n);
+    Recherche(L, n);
+    RemplacerAli(L, n);
+    AfficherPlusLong(L, n);
+
+    int ne;
+    printf("Saisir le nombre d'étudiants:\n");
+    scanf("%d", &ne);
+    ETUDIANT E[50];
+    RemplirEtudiants(E, ne);
+
+    EMPRUNT emp[50];
+    int nb_emp = 3;
+    printf("Saisir les dates d'emprunt des 3 premiers emprunts (jour mois annee):\n");
+    for (int i = 0; i < 3; i++)
+    {
+        emp[i].etud = E[i];
+        emp[i].livre = L[i];
+        scanf("%d %d %d", &emp[i].date_emprunt.jj, &emp[i].date_emprunt.mm, &emp[i].date_emprunt.aa);
+
+        emp[i].date_retour = Ajouter15Jours(emp[i].date_emprunt);
+    }
+
+    DATE actuelle;
+    printf("Saisir la date actuelle (jour mois annee):\n");
+    scanf("%d %d %d", &actuelle.jj, &actuelle.mm, &actuelle.aa);
+    mise_a_jour_etat(L, n, emp, nb_emp, actuelle);
+
+    printf("Livres actuellement disponibles:\n");
+    for (int i = 0; i < n; i++)
+    {
+        if (L[i].Etat == 1)
+            printf("%s\n", L[i].titre);
+    }
+
+    printf("Saisir un étudiant pour emprunter un livre (nom prenom CIN):\n");
+    ETUDIANT x;
+    char isbn[30];
+    scanf("%s %s %ld", x.nom, x.prenom, &x.CIN);
+    int pos = rech_lineaire(E, ne, x.nom, x.prenom);
+    if (pos == -1)
+    {
+        E[ne] = x;
+        pos = ne;
+        ne++;
+        AfficherEtudiants(E, ne);
+    }
+
+    int k = -1;
+    while (1)
+    {
+        printf("Saisir l'ISBN du livre à emprunter:\n");
+        scanf("%s", isbn);
+        k = chercher_livre(L, n, isbn);
+        if (k != -1 && L[k].Etat == 1)
+        {
+            printf("Livre disponible, vous pouvez l'emprunter.\n");
+            break;
+        }
+        else
+        {
+            printf("Livre non disponible ou ISBN invalide, ressaisir.\n");
+        }
+    }
+
+    if (nb_emp < 50)
+    {
+        emp[nb_emp].etud = E[pos];
+        emp[nb_emp].livre = L[k];
+        printf("Saisir la date d'emprunt (jour mois annee):\n");
+        scanf("%d %d %d", &emp[nb_emp].date_emprunt.jj, &emp[nb_emp].date_emprunt.mm, &emp[nb_emp].date_emprunt.aa);
+        emp[nb_emp].date_retour = Ajouter15Jours(emp[nb_emp].date_emprunt);
+        L[k].Etat = 0;
+        nb_emp++;
+    }
+
+    int s;
+    printf("Saisir l'indice de l'emprunt à supprimer:\n");
+    scanf("%d", &s);
+    if (s >= 0 && s < nb_emp)
+    {
+        int ks = chercher_livre(L, n, emp[s].livre.ISBN);
+        if (ks != -1)
+            L[ks].Etat = -1;
+        for (int i = s; i < nb_emp - 1; i++)
+            emp[i] = emp[i + 1];
+        nb_emp--;
+    }
+
+    AfficherEmprunts(emp, nb_emp);
     return 0;
 }
