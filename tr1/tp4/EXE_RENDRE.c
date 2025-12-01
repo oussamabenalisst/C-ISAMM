@@ -4,7 +4,8 @@
 #define MAX_ETATS 20
 #define MAX_SYMBOLES 10
 
-typedef struct {
+typedef struct
+{
     int nombreEtats;
     int nombreSymboles;
     int etatInitial;
@@ -13,23 +14,28 @@ typedef struct {
     int transition[MAX_ETATS][MAX_SYMBOLES];
 } AUTOMATE;
 
-int symboleIndex(char c, char symboles[], int nb) {
-    for(int i = 0; i < nb; i++) {
-        if(symboles[i] == c)
+int symboleIndex(char c, char symboles[], int nb)
+{
+    for (int i = 0; i < nb; i++)
+    {
+        if (symboles[i] == c)
             return i;
     }
     return -1; // symbole inexistant
 }
 
-int estFinal(int etat, int etatsFinaux[], int nbFinaux) {
-    for(int i = 0; i < nbFinaux; i++) {
-        if(etatsFinaux[i] == etat)
+int estFinal(int etat, int etatsFinaux[], int nbFinaux)
+{
+    for (int i = 0; i < nbFinaux; i++)
+    {
+        if (etatsFinaux[i] == etat)
             return 1;
     }
     return 0;
 }
 
-int main() {
+int main()
+{
     AUTOMATE A;
     int nbFinaux;
 
@@ -42,7 +48,8 @@ int main() {
     scanf("%d", &A.nombreSymboles);
 
     printf("Donner les symboles : ");
-    for(int i = 0; i < A.nombreSymboles; i++) {
+    for (int i = 0; i < A.nombreSymboles; i++)
+    {
         scanf(" %c", &A.symboles[i]);
     }
 
@@ -53,15 +60,18 @@ int main() {
     scanf("%d", &nbFinaux);
 
     printf("Donner les etats finaux : ");
-    for(int i = 0; i < nbFinaux; i++) {
+    for (int i = 0; i < nbFinaux; i++)
+    {
         scanf("%d", &A.etatsFinaux[i]);
     }
 
     printf("\n=== Matrice de transition ===\n");
     printf("(Chaque ligne correspond a un etat, chaque colonne a un symbole)\n");
 
-    for(int i = 0; i < A.nombreEtats; i++) {
-        for(int j = 0; j < A.nombreSymboles; j++) {
+    for (int i = 0; i < A.nombreEtats; i++)
+    {
+        for (int j = 0; j < A.nombreSymboles; j++)
+        {
             printf("Transition(%d, %c) = ", i, A.symboles[j]);
             scanf("%d", &A.transition[i][j]);
         }
@@ -73,10 +83,12 @@ int main() {
 
     int etatCourant = A.etatInitial;
 
-    for(int i = 0; i < strlen(mot); i++) {
+    for (int i = 0; i < strlen(mot); i++)
+    {
         int col = symboleIndex(mot[i], A.symboles, A.nombreSymboles);
 
-        if(col == -1) {
+        if (col == -1)
+        {
             printf("Symbole '%c' inexistant dans l'automate. Mot non accepte.\n", mot[i]);
             return 0;
         }
@@ -84,7 +96,7 @@ int main() {
         etatCourant = A.transition[etatCourant][col];
     }
 
-    if(estFinal(etatCourant, A.etatsFinaux, nbFinaux))
+    if (estFinal(etatCourant, A.etatsFinaux, nbFinaux))
         printf("Le mot '%s' est ACCEPTE.\n", mot);
     else
         printf("Le mot '%s' est REFUSE.\n", mot);
