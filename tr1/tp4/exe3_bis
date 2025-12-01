@@ -1,0 +1,225 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_LIVRES 100
+#define MAX_ETUDIANTS 50
+#define MAX_EMPRUNTS 3
+
+
+typedef struct {
+    char titre[100];
+    char auteur[100];
+    int annee;
+    char isbn[20];
+    int etat;   
+} LIVRE;
+
+typedef struct {
+    int jour, mois, annee;
+} DATE;
+
+typedef struct {
+    char nom[50];
+    char prenom[50];
+    long cin;
+} ETUDIANT;
+
+typedef struct {
+    ETUDIANT etu;
+    LIVRE livre;
+    DATE emprunt;
+    DATE retour;
+} EMPRUNT;
+
+
+int comparerDates(DATE d1, DATE d2) {
+    if(d1.annee != d2.annee) return d1.annee > d2.annee;
+    if(d1.mois != d2.mois) return d1.mois > d2.mois;
+    return d1.jour > d2.jour;
+}
+
+DATE ajouter15Jours(DATE d) {
+    d.jour += 15;
+    if(d.jour > 30) { d.jour -= 30; d.mois++; }
+    if(d.mois > 12) { d.mois = 1; d.annee++; }
+    return d;
+}
+
+int rechercherEtudiant(ETUDIANT T[], int n, long cin) {
+    for(int i=0;i<n;i++)
+        if(T[i].cin == cin) return i;
+    return -1;
+}
+
+int rechercherLivreISBN(LIVRE T[], int n, char isbn[]) {
+    for(int i=0;i<n;i++)
+        if(strcmp(T[i].isbn, isbn)==0) return i;
+    return -1;
+}
+
+
+int main() {
+
+    LIVRE livres[MAX_LIVRES];
+    int nLivres;
+
+    printf("Donner le nombre de livres : ");
+    scanf("%d", &nLivres);
+
+    for(int i=0;i<nLivres;i++){
+        printf("\nLivre %d : \n", i+1);
+
+        printf("Titre : "); scanf(" %[^\n]", livres[i].titre);
+        printf("Auteur : "); scanf(" %[^\n]", livres[i].auteur);
+        printf("Annee : "); scanf("%d", &livres[i].annee);
+        printf("ISBN : "); scanf(" %[^\n]", livres[i].isbn);
+
+        livres[i].etat = -1;
+    }
+
+    int an;
+    printf("\nDonner une annee pour rechercher : ");
+    scanf("%d", &an);
+
+    printf("\nLivres publies en %d :\n", an);
+    for(int i=0;i<nLivres;i++)
+        if(livres[i].annee == an)
+            printf("- %s\n", livres[i].titre);
+
+    for(int i=0;i<nLivres;i++){
+        if(strstr(livres[i].auteur, "Ali") || strstr(livres[i].auteur, "ali"))
+            strcpy(livres[i].auteur, "Salah");
+    }
+
+    int max = 0;
+    printf("\nLivre(s) avec le titre le plus long :\n");
+    for(int i=0;i<nLivres;i++){
+        int len = strlen(livres[i].titre);
+        if(len > max) max = len;
+    }
+    for(int i=0;i<nLivres;i++)
+        if(strlen(livres[i].titre) == max)
+            printf("- %s\n", livres[i].titre);
+
+    ETUDIANT etudiants[MAX_ETUDIANTS];
+    int nEtudiants;
+
+    printf("\nDonner le nombre d'etudiants : ");
+    scanf("%d", &nEtudiants);
+
+    for(int i=0;i<nEtudiants;i++){
+        printf("\nEtudiant %d :\n", i+1);
+        printf("Nom : "); scanf(" %[^\n]", etudiants[i].nom);
+        printf("Prenom : "); scanf(" %[^\n]", etudiants[i].prenom);
+        printf("CIN : "); scanf("%ld", &etudiants[i].cin);
+    }
+
+    EMPRUNT E[MAX_EMPRUNTS];
+    int nEmp = 0;
+
+    printf("\nInitialisation de %d emprunts...\n", MAX_EMPRUNTS);
+
+    for(int i=0;i<MAX_EMPRUNTS;i++){
+        printf("\nEmprunt %d (etu + livre + date emprunt) :\n", i+1);
+
+        printf("Nom : "); scanf(" %[^\n]", E[i].etu.nom);
+        printf("Prenom : "); scanf(" %[^\n]", E[i].etu.prenom);
+        printf("CIN : "); scanf("%ld", &E[i].etu.cin);
+
+        printf("ISBN livre : "); scanf(" %[^\n]", E[i].livre.isbn);
+        strcpy(E[i].livre.titre, "Livre inconnu"); 
+
+        printf("Date emprunt (j m a): ");
+        scanf("%d %d %d", &E[i].emprunt.jour, &E[i].emprunt.mois, &E[i].emprunt.annee);
+
+        E[i].retour = ajouter15Jours(E[i].emprunt);
+
+        nEmp++;
+    }
+
+    DATE today;
+    printf("\nDonner la date actuelle (j m a) : ");
+    scanf("%d %d %d", &today.jour, &today.mois, &today.annee);
+
+    for(int i=0;i<nLivres;i++){
+        livres[i].etat = -1; 
+
+        for(int j=0;j<nEmp;j++){
+            if(strcmp(livres[i].isbn, E[j].livre.isbn)==0){
+                if(comparerDates(today, E[j].retour))
+                    livres[i].etat = 1; 
+                else
+                    livres[i].etat = 0; 
+            }
+        }
+    }
+
+    printf("\nLivres disponibles :\n");
+    for(int i=0;i<nLivres;i++)
+        if(livres[i].etat == 1 || livres[i].etat == -1)
+            printf("- %s (ISBN %s)\n", livres[i].titre, livres[i].isbn);
+
+    ETUDIANT newEtu;
+    char isbnInput[20];
+
+    printf("\nNouvel emprunt :\n");
+
+    printf("Nom : "); scanf(" %[^\n]", newEtu.nom);
+    printf("Prenom : "); scanf(" %[^\n]", newEtu.prenom);
+    printf("CIN : "); scanf("%ld", &newEtu.cin);
+
+    int pos = rechercherEtudiant(etudiants, nEtudiants, newEtu.cin);
+    if(pos == -1){
+        etudiants[nEtudiants++] = newEtu;
+        printf("Nouvel etudiant ajoute.\n");
+    }
+
+    int posLivre;
+    do {
+        printf("ISBN du livre a emprunter : ");
+        scanf(" %[^\n]", isbnInput);
+
+        posLivre = rechercherLivreISBN(livres, nLivres, isbnInput);
+        if(posLivre == -1) printf("ISBN invalide ! Reessayer.\n");
+
+    } while(posLivre == -1);
+
+    while(livres[posLivre].etat == 0){
+        printf("Livre non disponible ! Saisir un autre ISBN : ");
+        scanf(" %[^\n]", isbnInput);
+        posLivre = rechercherLivreISBN(livres, nLivres, isbnInput);
+    }
+
+    if(nEmp < MAX_EMPRUNTS){
+        E[nEmp].etu = newEtu;
+        E[nEmp].livre = livres[posLivre];
+
+        printf("Date emprunt (j m a) : ");
+        scanf("%d %d %d", &E[nEmp].emprunt.jour, &E[nEmp].emprunt.mois, &E[nEmp].emprunt.annee);
+
+        E[nEmp].retour = ajouter15Jours(E[nEmp].emprunt);
+        livres[posLivre].etat = 0;
+
+        nEmp++;
+    }
+
+    int ind;
+    printf("\nDonner indice emprunt a supprimer (0-%d) : ", nEmp-1);
+    scanf("%d", &ind);
+
+    if(ind >= 0 && ind < nEmp){
+        char isbnSupp[20];
+        strcpy(isbnSupp, E[ind].livre.isbn);
+
+        for(int i=ind;i<nEmp-1;i++)
+            E[i] = E[i+1];
+
+        nEmp--;
+        for(int i=0;i<nLivres;i++)
+            if(strcmp(livres[i].isbn, isbnSupp)==0)
+                livres[i].etat = 1;
+    }
+
+    printf("\n--- FIN PROGRAMME ---\n");
+    return 0;
+}
