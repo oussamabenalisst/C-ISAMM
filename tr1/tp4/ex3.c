@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#define MAX_ETUDIANTS 100
 typedef struct
 {
     char titre[50];
@@ -9,6 +10,26 @@ typedef struct
     char ISBN[20];
     int Etat;
 } Livre;
+typedef struct
+{
+    int jour;
+    int mois;
+    int annee;
+} Date;
+typedef struct
+{
+    char nom[50];
+    char prenom[50];
+    char cin[20];
+    Date date
+} Etudiant;
+
+typedef struct
+{
+    Etudiant etudiant;
+    Livre livre;
+    Date dateEmprunt;
+} EMPRUNT;
 
 int saisire()
 {
@@ -128,6 +149,21 @@ void afficherLivres(Livre Livres[], int n)
         }
     }
 }
+void RemplirEtudiants(Etudiant etudiants[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("Etudiant %d:\n", i + 1);
+        printf("Nom: ");
+        scanf("%s", etudiants[i].nom);
+        printf("Prenom: ");
+        scanf("%s", etudiants[i].prenom);
+        printf("CIN: ");
+        scanf("%s", etudiants[i].cin);
+        printf("Date de naissance (jj mm aaaa): ");
+        scanf("%d %d %d", &etudiants[i].date.jour, &etudiants[i].date.mois, &etudiants[i].date.annee);
+    }
+}
 int main()
 {
     int n = saisire();
@@ -136,5 +172,10 @@ int main()
     RechercherLivre(Livres, n);
     RemplacerAuteur(Livres, n);
     afficherLivres(Livres, n);
+    Etudiant etudiants[MAX_ETUDIANTS];
+    int n_etudiants = saisire();
+    RemplirEtudiants(etudiants, n_etudiants);
+    EMPRUNT emprunts[3];
+    RemplirEmprunts(emprunts, Livres, etudiants, n);
     return 0;
 }
